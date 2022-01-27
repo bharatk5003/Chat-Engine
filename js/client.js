@@ -1,14 +1,14 @@
-// prompt("Enter your name");
-// alert("Hello Bharat");
-// const name=prompt("Enter your name to join");
-// const socket= io('http://localhost:8000');
 
-const name ="Bhanu";
+// const name=prompt("Enter your name to join");
+const socket= io('http://localhost:8000');
+
+// const name ="Bhanu";
 const form=document.getElementById('send-container')
 const messageInput=document.getElementById('messageInp')
 const messageContainer=document.querySelector('.container')
+// alert("hello");
 
-prompt("Please Enter your Name");
+const name=prompt("Please Enter your Name");
 
 const append=(message,position)=>{
    const messageElement= document.createElement('div');
@@ -19,7 +19,7 @@ const append=(message,position)=>{
 
 }
 /*
-socket.emit('new-user-joined',name);
+
 
 socket.on('user-joined',data=>{
 
