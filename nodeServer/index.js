@@ -1,21 +1,40 @@
-//Node server whick will handle socket io Connection
-console.log("Starting the server");
+// var express = require("express");
+// const app = express();
+// const server = require("http").createServer(app);
 
-const io=require('socket.io')(8000);
+const { createServer } = require("http");
+const { Server } = require("socket.io");
 
-const users={};
+const httpServer = createServer();
 
-io.on('connection',socket=>{
-  socket.on('new-user-joined',name=>{
-    console.log("New-User",name);
-    console.log("Ganga Yadav");
-       users[socket.id]=name;
-       socket.broadcast.emit('user-joined',name);
+const io = new Server(httpServer, {
+  cors: {
+    origin: "*",
+    methods: ["GET", "POST"],
+  },
+});
+httpServer.listen(8000);
+
+// app.use(cors())
+
+const users = {};
+
+io.on("connection", (socket) => {
+  socket.on("new-user-joined", (name) => {
+    console.log("new user joined the chat", name);
+    users[socket.id] = name;
+    socket.broadcast.emit("user-joined", name);
   });
 
-socket.on('send',message=>{
-    socket.broadcast.emit('receive',{message:message,name:user[socket.id]});
-});
+  socket.on("send", (message) => {
+    socket.broadcast.emit("receive", {
+      message: message,
+      name: users[socket.id],
+    });
+  });
 
-
+  socket.on("disconnect", (message) => {
+    socket.broadcast.emit("left", users[socket.id]);
+    delete users[socket.id];
+  });
 });
